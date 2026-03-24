@@ -1,6 +1,6 @@
-# whack-a-mole-client
+# multiplayer-whack-a-mole
 
-This template should help get you started developing with Vue 3 in Vite.
+Client for Multiplayer Whack-a-Mole game.
 
 ## Recommended IDE Setup
 

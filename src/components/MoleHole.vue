@@ -1,17 +1,25 @@
 <template>
   <div :class="['mole-hole', { hitAnimation }]" @click="whack">
-    <div v-if="isActive" class="mole">🐹</div>
-    <div v-if="showMallet" class="mallet" :class="{ swing: showMallet }">🔨</div>
-    <div v-if="showScore" class="score-pop">+1</div>
+    <Mole v-show="isActive" class="mole" />
+    <Mallet :swing="showMallet" />
+    <ScoreIncrement v-show="showScore" value="1" />
   </div>
 </template>
 
 <script>
 import { useGameStore } from '@/stores/gameStore';
 import { socket } from '@/services/socket';
+import Mole from '@/components/Mole.vue';
+import Mallet from '@/components/Mallet.vue';
+import ScoreIncrement from '@/components/ScoreIncrement.vue';
 
 export default {
   name: 'MoleHole',
+  components: {
+    Mole,
+    Mallet,
+    ScoreIncrement,
+  },
   props: {
     index: {
       type: Number,
@@ -40,11 +48,13 @@ export default {
       setTimeout(() => {
         this.hitAnimation = false;
       }, 300); // match animation duration
-      this.showPlusOne(index);
+      this.showScoreIncrement(index);
     });
   },
   methods: {
     whack() {
+      if (this.store.winner) return;
+
       this.showMallet = true;
       setTimeout(() => {
         this.showMallet = false;
@@ -54,7 +64,7 @@ export default {
 
       socket.emit('whack', this.index);
     },
-    showPlusOne(index) {
+    showScoreIncrement(index) {
       this.showScore = true;
       setTimeout(() => {
         this.showScore = false;
@@ -72,7 +82,6 @@ export default {
   margin: 10px;
   border: 1px solid #c79e7c;
   aspect-ratio: 1 / 1;
-  box-sizing: border-box; // include padding/border in width
   border-radius: 50%;
   cursor: pointer;
   flex: 0 0 calc(25% - 20px);
@@ -80,14 +89,6 @@ export default {
 
   &.hitAnimation {
     animation: moleHoleAnimation 0.3s ease forwards;
-  }
-
-  .mole {
-    font-size: 3.5rem;
-
-    @media (max-width: 600px) {
-      font-size: 2rem;
-    }
   }
 
   @keyframes moleHoleAnimation {
@@ -102,53 +103,9 @@ export default {
     }
   }
 
-  .score-pop {
-    position: absolute;
-    color: gold;
-    font-weight: bold;
-    font-size: 40px;
-    animation: floatUp 0.6s ease forwards;
-  }
-
-  @keyframes floatUp {
-    0% {
-      opacity: 1;
-      transform: translateY(40px);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-80px);
-    }
-  }
-
-  $malletOffsetX: 40px;
-  $malletOffsetY: -20px;
-
-  .mallet {
-    position: absolute;
-    font-size: 80px;
-    pointer-events: none;
-
-    transform: translate($malletOffsetX, $malletOffsetY);
-    transform-origin: bottom center;
-
-    &.swing {
-      animation: malletSwing 0.35s ease;
-    }
-  }
-
-  @keyframes malletSwing {
-    0% {
-      transform: translate($malletOffsetX, $malletOffsetY) rotate(0deg);
-    }
-
-    50% {
-      transform: translate($malletOffsetX, $malletOffsetY) rotate(-45deg) scale(1.1);
-    }
-
-    100% {
-      transform: translate($malletOffsetX, $malletOffsetY) rotate(0deg);
-    }
+  &.gameOver {
+    cursor: default;
+    opacity: 0.6;
   }
 }
 </style>

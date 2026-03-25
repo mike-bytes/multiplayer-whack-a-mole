@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 
 export const useGameStore = defineStore('game', {
   state: () => ({
-    activeMole: null,
+    activeMoles: [],
     players: {},
   }),
   actions: {
     setGameState(state) {
-      this.activeMole = state.activeMole;
+      this.activeMoles = state.activeMoles;
       this.players = state.players;
     },
   },

@@ -1,7 +1,6 @@
 <template>
   <div :class="['mole-hole', { hitAnimation }]" @click="whack">
     <div v-if="isActive" class="mole">🐹</div>
-
     <div v-if="showMallet" class="mallet" :class="{ swing: showMallet }">🔨</div>
     <div v-if="showScore" class="score-pop">+1</div>
   </div>
@@ -29,8 +28,7 @@ export default {
   },
   computed: {
     isActive() {
-      console.log('hole', this.index, 'activeMole', this.store.activeMole);
-      return this.store.activeMole === this.index;
+      return this.store.activeMoles.includes(this.index);
     },
   },
   mounted() {
@@ -77,7 +75,7 @@ export default {
   box-sizing: border-box; // include padding/border in width
   border-radius: 50%;
   cursor: pointer;
-  flex: 0 0 calc(33.333% - 30px);
+  flex: 0 0 calc(25% - 20px);
   background-color: #593b22;
 
   &.hitAnimation {
@@ -85,7 +83,11 @@ export default {
   }
 
   .mole {
-    font-size: 4rem;
+    font-size: 3.5rem;
+
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
   }
 
   @keyframes moleHoleAnimation {

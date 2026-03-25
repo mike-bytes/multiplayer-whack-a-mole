@@ -1,17 +1,23 @@
 <template>
   <div class="game-board">
     <div class="holes-wrapper">
-      <MoleHole v-for="i in 9" :key="i" :index="i" />
+      <MoleHole v-for="i in NUM_HOLES" :key="i" :index="i" />
     </div>
   </div>
 </template>
 
 <script>
 import MoleHole from '@/components/MoleHole.vue';
+import { NUM_HOLES } from '@/constants/constants';
 
 export default {
   name: 'GameBoard',
   components: { MoleHole },
+  data() {
+    return {
+      NUM_HOLES, // for template access
+    };
+  },
 };
 </script>
 
@@ -21,6 +27,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 
   .holes-wrapper {
     display: flex;

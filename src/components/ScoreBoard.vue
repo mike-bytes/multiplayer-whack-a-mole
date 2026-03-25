@@ -2,8 +2,8 @@
   <div class="score-board">
     <div v-for="(player, id) in store.players" :key="id">
       <div class="player">
-        <div class="name">{{ player.name }}</div>
-        <div class="score">{{ player.score }}</div>
+        <div class="name" :key="player.score">{{ player.name }}</div>
+        <div class="score" :key="player.score">{{ player.score }}</div>
       </div>
     </div>
   </div>
@@ -28,6 +28,10 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  background-color: grey;
+  padding: 5px 10px;
+  font-size: 1.3rem;
+  border-radius: 10px;
 
   .player {
     display: flex;
@@ -38,9 +42,27 @@ export default {
 
     .name {
       justify-content: left;
+      color: white;
+      animation: scorePop 0.25s ease;
     }
     .score {
-      color: green;
+      color: yellow;
+      animation: scorePop 0.25s ease;
+    }
+
+    @keyframes scorePop {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.4);
+        color: gold;
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
   }
 }

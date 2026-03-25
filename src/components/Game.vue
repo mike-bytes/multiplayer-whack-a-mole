@@ -1,10 +1,11 @@
 <template>
   <div class="game">
     <div class="top">
-      <div class="title">Whack-a-Mole</div>
+      <div class="title">Multiplayer Whack-a-Mole</div>
       <NameInput v-model="userName" />
       <ScoreBoard />
     </div>
+    <WinnerBanner v-if="!!store.winner" />
     <GameBoard />
   </div>
 </template>
@@ -13,12 +14,13 @@
 import NameInput from '@/components/NameInput.vue';
 import ScoreBoard from '@/components/ScoreBoard.vue';
 import GameBoard from '@/components/GameBoard.vue';
+import WinnerBanner from '@/components/WinnerBanner.vue';
 import { socket } from '@/services/socket';
 import { useGameStore } from '@/stores/gameStore';
 
 export default {
   name: 'Game',
-  components: { ScoreBoard, GameBoard, NameInput },
+  components: { ScoreBoard, GameBoard, NameInput, WinnerBanner },
   data() {
     return {
       store: useGameStore(),

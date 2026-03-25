@@ -1,7 +1,7 @@
 <template>
   <div class="game-board">
     <div class="holes-wrapper">
-      <MoleHole v-for="i in NUM_HOLES" :key="i" :index="i" />
+      <MoleHole :class="{ gameOver: store.winner }" v-for="i in NUM_HOLES" :key="i" :index="i" />
     </div>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import MoleHole from '@/components/MoleHole.vue';
 import { NUM_HOLES } from '@/constants/constants';
+import { useGameStore } from '@/stores/gameStore';
 
 export default {
   name: 'GameBoard',
@@ -16,6 +17,7 @@ export default {
   data() {
     return {
       NUM_HOLES, // for template access
+      store: useGameStore(),
     };
   },
 };

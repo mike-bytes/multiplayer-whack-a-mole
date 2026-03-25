@@ -1,6 +1,6 @@
 <template>
   <div class="score-board">
-    <div v-for="(player, id) in store.players" :key="id">
+    <div v-for="player in players" :key="player.id">
       <div class="player">
         <div class="name" :key="player.score">{{ player.name }}</div>
         <div class="score" :key="player.score">{{ player.score }}</div>
@@ -14,6 +14,25 @@ import { useGameStore } from '@/stores/gameStore';
 
 export default {
   name: 'ScoreBoard',
+  props: {
+    shouldSort: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    sortedPlayers() {
+      if (!this.store.players) return [];
+      return Object.values(this.store.players).sort((a, b) => b.score - a.score);
+    },
+    players() {
+      if (this.shouldSort) {
+        return this.sortedPlayers;
+      } else {
+        return this.store.players;
+      }
+    },
+  },
   data() {
     return {
       store: useGameStore(),

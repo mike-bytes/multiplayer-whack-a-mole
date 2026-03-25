@@ -1,6 +1,7 @@
 <template>
-  <div class="mole-hole" @click="whack">
+  <div :class="['mole-hole', { hitAnimation }]" @click="whack">
     <div v-if="isActive" class="mole">🐹</div>
+
     <div v-if="showMallet" class="mallet" :class="{ swing: showMallet }">🔨</div>
     <div v-if="showScore" class="score-pop">+1</div>
   </div>
@@ -23,6 +24,7 @@ export default {
       store: useGameStore(),
       showScore: false,
       showMallet: false,
+      hitAnimation: false,
     };
   },
   computed: {
@@ -33,7 +35,13 @@ export default {
   },
   mounted() {
     socket.on('hitConfirmed', (index) => {
+      if (index !== this.index) return;
+
       console.log('hit confirmed');
+      this.hitAnimation = true;
+      setTimeout(() => {
+        this.hitAnimation = false;
+      }, 300); // match animation duration
       this.showPlusOne(index);
     });
   },
@@ -49,8 +57,6 @@ export default {
       socket.emit('whack', this.index);
     },
     showPlusOne(index) {
-      if (index !== this.index) return;
-
       this.showScore = true;
       setTimeout(() => {
         this.showScore = false;
@@ -74,12 +80,24 @@ export default {
   flex: 0 0 calc(33.333% - 30px);
   background-color: #593b22;
 
-  &.isClicked {
-    background-color: red;
+  &.hitAnimation {
+    animation: moleHoleAnimation 0.3s ease forwards;
   }
 
   .mole {
     font-size: 4rem;
+  }
+
+  @keyframes moleHoleAnimation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.7); /* shrink a bit */
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .score-pop {

@@ -1,22 +1,22 @@
 <template>
   <div :class="['mole-hole', { hitAnimation }]" @click="whack">
-    <Mole v-if="mole" class="mole" :type="mole.type" />
+    <Item v-if="item" :type="item.type" />
     <Mallet :swing="showMallet" />
-    <ScoreIncrement v-show="showScore" :points="points" value="1" />
+    <ScoreIncrement v-show="showScore" :points="points" />
   </div>
 </template>
 
 <script>
 import { useGameStore } from '@/stores/gameStore';
 import { socket } from '@/services/socket';
-import Mole from '@/components/Mole.vue';
+import Item from '@/components/Item.vue';
 import Mallet from '@/components/Mallet.vue';
 import ScoreIncrement from '@/components/ScoreIncrement.vue';
 
 export default {
   name: 'MoleHole',
   components: {
-    Mole,
+    Item,
     Mallet,
     ScoreIncrement,
   },
@@ -36,10 +36,8 @@ export default {
     };
   },
   computed: {
-    mole() {
-      const mole = this.store.activeMoles.find((mole) => mole.index === this.index);
-      // console.log(mole);
-      return mole;
+    item() {
+      return this.store.activeMoles.find((item) => item.index === this.index);
     },
   },
   mounted() {
@@ -62,7 +60,7 @@ export default {
         this.showMallet = false;
       }, 350); // match with animation duration
 
-      if (!this.mole) return;
+      if (!this.item) return;
 
       socket.emit('whack', this.index);
     },

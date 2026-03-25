@@ -1,5 +1,7 @@
 <template>
-  <div class="score-increment">+{{ points }}</div>
+  <div :class="['score-increment', { 'is-negative-points': isNegativePoints }]">
+    {{ formattedPoints }}
+  </div>
 </template>
 
 <script>
@@ -9,6 +11,16 @@ export default {
     points: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    isNegativePoints() {
+      console.log('is negative', this.points < 0);
+      return this.points < 0;
+    },
+    formattedPoints() {
+      if (this.points > 0) return `+${this.points}`;
+      return `${this.points}`;
     },
   },
 };
@@ -21,6 +33,10 @@ export default {
   font-weight: bold;
   font-size: 60px;
   animation: floatUp 1s ease forwards;
+
+  &.is-negative-points {
+    color: red;
+  }
 }
 
 @keyframes floatUp {

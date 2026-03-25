@@ -1,10 +1,16 @@
 <template>
-  <div class="score-increment">+1</div>
+  <div class="score-increment">+{{ points }}</div>
 </template>
 
 <script>
 export default {
   name: 'ScoreIncrement',
+  props: {
+    points: {
+      type: Number,
+      default: 0,
+    },
+  },
 };
 </script>
 

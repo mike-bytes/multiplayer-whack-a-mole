@@ -1,10 +1,19 @@
 <template>
-  <div class="mole">🐹</div>
+  <div class="mole">
+    <div v-if="type === 'star'">⭐</div>
+    <div v-else>🐹</div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Mole',
+  props: {
+    type: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 

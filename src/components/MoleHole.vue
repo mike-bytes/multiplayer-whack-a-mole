@@ -1,8 +1,8 @@
 <template>
   <div :class="['mole-hole', { hitAnimation }]" @click="whack">
-    <Mole v-show="isActive" class="mole" />
+    <Mole v-if="mole" class="mole" :type="mole.type" />
     <Mallet :swing="showMallet" />
-    <ScoreIncrement v-show="showScore" value="1" />
+    <ScoreIncrement v-show="showScore" :points="points" value="1" />
   </div>
 </template>
 
@@ -32,23 +32,25 @@ export default {
       showScore: false,
       showMallet: false,
       hitAnimation: false,
+      points: 0,
     };
   },
   computed: {
-    isActive() {
-      return this.store.activeMoles.includes(this.index);
+    mole() {
+      const mole = this.store.activeMoles.find((mole) => mole.index === this.index);
+      // console.log(mole);
+      return mole;
     },
   },
   mounted() {
-    socket.on('hitConfirmed', (index) => {
+    socket.on('hitConfirmed', ({ index, points }) => {
       if (index !== this.index) return;
 
-      console.log('hit confirmed');
       this.hitAnimation = true;
       setTimeout(() => {
         this.hitAnimation = false;
       }, 300); // match animation duration
-      this.showScoreIncrement(index);
+      this.showScoreIncrement(index, points);
     });
   },
   methods: {
@@ -60,11 +62,12 @@ export default {
         this.showMallet = false;
       }, 350); // match with animation duration
 
-      if (!this.isActive) return;
+      if (!this.mole) return;
 
       socket.emit('whack', this.index);
     },
-    showScoreIncrement(index) {
+    showScoreIncrement(index, points) {
+      this.points = points;
       this.showScore = true;
       setTimeout(() => {
         this.showScore = false;

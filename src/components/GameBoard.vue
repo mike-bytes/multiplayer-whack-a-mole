@@ -1,7 +1,12 @@
 <template>
   <div class="game-board">
     <div class="holes-wrapper">
-      <MoleHole :class="{ gameOver: store.winner }" v-for="i in NUM_HOLES" :key="i" :index="i" />
+      <MoleHole
+        :class="{ gameOver: store.winner }"
+        v-for="i in NUM_HOLES"
+        :key="i"
+        :index="i - 1"
+      />
     </div>
   </div>
 </template>

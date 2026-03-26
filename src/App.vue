@@ -14,5 +14,6 @@ export default {
 <style>
 * {
   box-sizing: border-box;
+  user-select: none;
 }
 </style>

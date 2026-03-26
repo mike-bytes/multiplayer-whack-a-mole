@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
 import App from '../App.vue';
+import { MOLE_TYPES } from '@/constants/constants';
 
 describe('App', () => {
   let store;
@@ -16,7 +17,7 @@ describe('App', () => {
     store = useGameStore();
     store.$reset();
 
-    store.activeItems = [{ index: 0, type: 'mole' }];
+    store.activeMoles = [{ index: 0, type: MOLE_TYPES.MOLE }];
   });
 
   it('mounts renders properly', () => {

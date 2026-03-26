@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
 import MoleHole from '@/components/MoleHole.vue';
+import { MOLE_TYPES } from '@/constants/constants';
 
 // Mock the socket
 vi.mock('@/services/socket', () => {
@@ -25,14 +26,14 @@ describe('MoleHole.vue', () => {
     store = useGameStore();
     store.$reset();
 
-    store.activeItems = [{ index: 0, type: 'mole' }];
+    store.activeMoles = [{ index: 0, type: MOLE_TYPES.MOLE }];
   });
 
   it('shows mole when active', () => {
     const wrapper = mount(MoleHole, {
       props: { index: 0 },
     });
-    expect(wrapper.find('.item').exists()).toBe(true);
+    expect(wrapper.find('.mole').exists()).toBe(true);
   });
 
   it('does not show mole when inactive', () => {

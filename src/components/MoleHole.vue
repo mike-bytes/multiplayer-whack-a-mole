@@ -51,6 +51,9 @@ export default {
       this.showScoreIncrement(index, points);
     });
   },
+  unmounted() {
+    socket.off('hitConfirmed');
+  },
   methods: {
     whack() {
       if (this.store.winner) return;

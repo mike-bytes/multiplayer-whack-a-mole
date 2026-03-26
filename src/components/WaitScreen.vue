@@ -43,6 +43,7 @@ export default {
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
+  text-align: center;
 
   .message {
     animation: fadeIn 0.5s ease;

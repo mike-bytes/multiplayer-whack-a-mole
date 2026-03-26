@@ -8,10 +8,10 @@
 
 <script>
 import { useGameStore } from '@/stores/gameStore';
-import { socket } from '@/services/socket';
 import Mole from '@/components/Mole.vue';
 import Mallet from '@/components/Mallet.vue';
 import ScoreIncrement from '@/components/ScoreIncrement.vue';
+import { useSocketStore } from '@/stores/socketStore';
 
 export default {
   name: 'MoleHole',
@@ -28,7 +28,8 @@ export default {
   },
   data() {
     return {
-      store: useGameStore(),
+      gameStore: useGameStore(),
+      socketStore: useSocketStore(),
       showScore: false,
       showMallet: false,
       hitAnimation: false,
@@ -37,26 +38,18 @@ export default {
   },
   computed: {
     mole() {
-      return this.store.activeMoles.find((mole) => mole.index === this.index);
+      return this.gameStore.activeMoles.find((mole) => mole.index === this.index);
     },
   },
   mounted() {
-    socket.on('hitConfirmed', ({ index, points }) => {
-      if (index !== this.index) return;
-
-      this.hitAnimation = true;
-      setTimeout(() => {
-        this.hitAnimation = false;
-      }, 300); // match animation duration
-      this.showScoreIncrement(index, points);
-    });
+    this.socketStore.socket.on('hitConfirmed', this.hitHandler);
   },
   unmounted() {
-    socket.off('hitConfirmed');
+    this.socketStore.socket.off('hitConfirmed', this.hitHandler);
   },
   methods: {
     whack() {
-      if (this.store.winner) return;
+      if (this.gameStore.winner) return;
 
       this.showMallet = true;
       setTimeout(() => {
@@ -65,7 +58,7 @@ export default {
 
       if (!this.mole) return;
 
-      socket.emit('whack', this.index);
+      this.socketStore.socket.emit('whack', this.index);
     },
     showScoreIncrement(index, points) {
       this.points = points;
@@ -73,6 +66,16 @@ export default {
       setTimeout(() => {
         this.showScore = false;
       }, 2000);
+    },
+    hitHandler({ index, points }) {
+      if (index !== this.index) return;
+
+      this.hitAnimation = true;
+      setTimeout(() => {
+        this.hitAnimation = false;
+      }, 300); // match animation duration
+
+      this.showScoreIncrement(index, points);
     },
   },
 };

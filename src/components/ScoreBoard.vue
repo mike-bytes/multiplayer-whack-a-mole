@@ -22,20 +22,20 @@ export default {
   },
   computed: {
     sortedPlayers() {
-      if (!this.store.players) return [];
-      return Object.values(this.store.players).sort((a, b) => b.score - a.score);
+      if (!this.gameStore.players) return [];
+      return Object.values(this.gameStore.players).sort((a, b) => b.score - a.score);
     },
     players() {
       if (this.shouldSort) {
         return this.sortedPlayers;
       } else {
-        return this.store.players;
+        return this.gameStore.players;
       }
     },
   },
   data() {
     return {
-      store: useGameStore(),
+      gameStore: useGameStore(),
     };
   },
 };

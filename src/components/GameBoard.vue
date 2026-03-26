@@ -2,7 +2,7 @@
   <div class="game-board">
     <div class="holes-wrapper">
       <MoleHole
-        :class="{ gameOver: store.winner }"
+        :class="{ gameOver: gameStore.winner }"
         v-for="i in NUM_HOLES"
         :key="i"
         :index="i - 1"
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       NUM_HOLES, // for template access
-      store: useGameStore(),
+      gameStore: useGameStore(),
     };
   },
 };

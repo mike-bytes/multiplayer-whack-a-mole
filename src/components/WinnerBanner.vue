@@ -1,9 +1,9 @@
 <template>
   <div class="winner-banner">
     <div class="banner-content">
-      <h1>🎉 {{ store.winner.name }} Wins! 🎉</h1>
+      <h1>🎉 {{ gameStore.winner.name }} Wins! 🎉</h1>
       <p>Final Scoring: <ScoreBoard /></p>
-      <div v-if="store.countdown > 0">{{ store.countdown }}</div>
+      <div v-if="gameStore.countdown > 0">{{ gameStore.countdown }}</div>
       <!-- <button @click="playAgain" class="btn-play-again">Play Again</button> -->
     </div>
   </div>
@@ -13,7 +13,7 @@
 import confetti from 'canvas-confetti';
 import { useGameStore } from '@/stores/gameStore';
 import ScoreBoard from '@/components/ScoreBoard.vue';
-import { socket } from '@/services/socket';
+import { useSocketStore } from '@/stores/socketStore';
 
 export default {
   name: 'WinnerBanner',
@@ -26,13 +26,14 @@ export default {
   },
   data() {
     return {
-      store: useGameStore(),
+      gameStore: useGameStore(),
+      socketStore: useSocketStore(),
       celebrationPlayed: false,
       interval: null,
     };
   },
   watch: {
-    'store.winner'(winner) {
+    'gameStore.winner'(winner) {
       if (!winner || this.celebrationPlayed) return;
       this.celebrationPlayed = true;
       confetti({ particleCount: 500, angle: 60, spread: 70, origin: { x: 0 } });
@@ -40,26 +41,28 @@ export default {
     },
   },
   mounted() {
-    socket.on('startCountdown', (endTime) => {
-      if (this.interval) clearInterval(this.interval);
-      this.interval = setInterval(() => {
-        const remaining = Math.ceil((endTime - Date.now()) / 1000);
-        this.store.countdown = Math.max(remaining, 0);
-
-        if (remaining <= 0) {
-          clearInterval(this.interval);
-        }
-      }, 1000);
-    });
+    this.socketStore.socket.once('startCountdown', this.startCountdownHandler);
   },
-  beforeUnmount() {
+  unmounted() {
+    this.socketStore.socket.off('startCountdown', this.startCountdownHandler);
     if (this.interval) clearInterval(this.interval);
   },
   methods: {
     playAgain() {
       confetti.reset();
       this.$emit('play-again');
-      this.store.winner = null;
+      this.gameStore.winner = null;
+    },
+    startCountdownHandler(endTime) {
+      if (this.interval) clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        const remaining = Math.ceil((endTime - Date.now()) / 1000);
+        this.gameStore.countdown = Math.max(remaining, 0);
+
+        if (remaining <= 0) {
+          clearInterval(this.interval);
+        }
+      }, 1000);
     },
   },
 };

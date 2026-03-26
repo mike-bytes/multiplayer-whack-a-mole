@@ -1,11 +1,11 @@
 <template>
-  <div class="game">
+  <div class="game" v-if="socketStore.connected">
     <div class="top">
       <div class="title">Multiplayer Whack-a-Mole</div>
       <NameInput v-model="userName" />
       <ScoreBoard />
     </div>
-    <WinnerBanner v-if="!!store.winner" />
+    <WinnerBanner v-if="!!gameStore.winner" />
     <GameBoard />
   </div>
 </template>
@@ -15,38 +15,40 @@ import NameInput from '@/components/NameInput.vue';
 import ScoreBoard from '@/components/ScoreBoard.vue';
 import GameBoard from '@/components/GameBoard.vue';
 import WinnerBanner from '@/components/WinnerBanner.vue';
-import { socket } from '@/services/socket';
 import { useGameStore } from '@/stores/gameStore';
+import { useSocketStore } from '@/stores/socketStore';
 
 export default {
   name: 'Game',
   components: { ScoreBoard, GameBoard, NameInput, WinnerBanner },
   data() {
     return {
-      store: useGameStore(),
+      gameStore: useGameStore(),
+      socketStore: useSocketStore(),
       userName: '',
     };
   },
   watch: {
     userName(newValue) {
-      socket.emit('setPlayerName', this.userName);
+      this.socketStore.socket.emit('setPlayerName', this.userName);
     },
   },
   mounted() {
-    socket.on('gameState', (state) => {
-      this.store.setGameState(state);
-    });
+    this.socketStore.socket.on('gameState', this.gameStateHandler);
   },
   unmounted() {
-    socket.off('gameState');
+    this.socketStore.socket.off('gameState', this.gameStateHandler);
+  },
+  methods: {
+    gameStateHandler(state) {
+      this.gameStore.setGameState(state);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .game {
-  font-family: Arial, Helvetica, sans-serif;
-
   .top {
     display: flex;
     justify-content: space-around;

@@ -7,17 +7,17 @@ import App from '../App.vue';
 import { MOLE_TYPES } from '@/shared/constants';
 
 describe('App', () => {
-  let store;
+  let gameStore;
   let pinia;
 
   beforeEach(() => {
     pinia = createPinia();
     setActivePinia(pinia);
 
-    store = useGameStore();
-    store.$reset();
+    gameStore = useGameStore();
+    gameStore.$reset();
 
-    store.activeMoles = [{ index: 0, type: MOLE_TYPES.MOLE }];
+    gameStore.activeMoles = [{ index: 0, type: MOLE_TYPES.MOLE }];
   });
 
   it('mounts renders properly', () => {

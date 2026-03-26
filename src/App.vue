@@ -7,8 +7,8 @@ export default {
   name: 'App',
   components: { Game, WaitScreen },
   watch: {
-    'socketStore.connected'() {
-      this.isReady = true;
+    'socketStore.connected'(newValue) {
+      this.isReady = newValue;
     },
   },
   data() {
@@ -17,7 +17,6 @@ export default {
       socketStore: useSocketStore(),
     };
   },
-
   mounted() {
     this.socketStore.connectToServer();
   },

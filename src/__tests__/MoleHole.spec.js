@@ -50,11 +50,11 @@ describe('MoleHole.vue', () => {
     expect(socket.emit).toHaveBeenCalledWith('whack', 0);
   });
 
-  it('shows item when active', () => {
+  it('shows mole when active', () => {
     const wrapper = mount(MoleHole, {
       props: { index: 0 },
     });
 
-    expect(wrapper.findComponent({ name: 'Item' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'Mole' }).exists()).toBe(true);
   });
 });

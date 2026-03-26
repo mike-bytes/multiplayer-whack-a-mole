@@ -3,9 +3,9 @@
     <div v-if="type === MOLE_TYPES.STAR">⭐</div>
     <div v-else class="holding-wrapper">
       🐹
-      <div v-if="type === MOLE_TYPES.BOMB" class="holding">💣</div>
-      <div class="holding" v-else-if="type === MOLE_TYPES.GRAPE">🍇</div>
-      <div class="holding" v-else-if="type === MOLE_TYPES.BLUEBERRY">🫐</div>
+      <div v-if="holdingItem" class="holding">
+        {{ holdingItem }}
+      </div>
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 import { MOLE_TYPES } from '@/constants/constants';
 
 export default {
-  name: 'Item',
+  name: 'Mole',
   props: {
     type: {
       type: String,
@@ -25,6 +25,25 @@ export default {
     return {
       MOLE_TYPES, // for template access
     };
+  },
+  computed: {
+    holdingItem() {
+      switch (this.type) {
+        case MOLE_TYPES.GRAPE:
+          return '💣';
+        case MOLE_TYPES.BLUEBERRY:
+          return '🍇';
+        case MOLE_TYPES.LEMON:
+          return '🍋';
+        case MOLE_TYPES.THUMBS_DOWN:
+          return '👎';
+        case MOLE_TYPES.BANANA:
+          return '🍌';
+        default:
+          break;
+      }
+      return null;
+    },
   },
 };
 </script>

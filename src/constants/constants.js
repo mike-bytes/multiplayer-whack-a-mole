@@ -5,4 +5,7 @@ export const MOLE_TYPES = {
   BOMB: 'BOMB',
   GRAPE: 'GRAPE',
   BLUEBERRY: 'BLUEBERRY',
+  LEMON: 'LEMON',
+  THUMBS_DOWN: 'THUMBS_DOWN',
+  BANANA: 'BANANA',
 };

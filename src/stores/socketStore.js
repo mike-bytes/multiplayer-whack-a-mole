@@ -34,7 +34,7 @@ export const useSocketStore = defineStore('socket', {
 
       this.socket.on('disconnect', () => {
         console.log('lost connection');
-        // this.connected = false;
+        this.connected = false;
       });
 
       this.socket.on('reconnect', () => {

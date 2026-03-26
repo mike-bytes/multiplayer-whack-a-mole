@@ -34,6 +34,9 @@ export default {
 * {
   box-sizing: border-box;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   font-family: Arial, Helvetica, sans-serif;
 }
 </style>

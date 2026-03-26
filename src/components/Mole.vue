@@ -1,24 +1,17 @@
 <template>
-  <div class="item">
-    <div v-if="type === ITEM_TYPES.MOLE">🐹</div>
-    <div v-else-if="type === ITEM_TYPES.STAR">⭐</div>
-    <div v-else-if="type === ITEM_TYPES.BOMB">
-      <div class="mole">
-        🐹
-        <div class="holding">💣</div>
-      </div>
-    </div>
-    <div v-else-if="type === ITEM_TYPES.FRUIT">
-      <div class="mole">
-        🐹
-        <div class="holding">🍇</div>
-      </div>
+  <div class="mole">
+    <div v-if="type === MOLE_TYPES.STAR">⭐</div>
+    <div v-else class="holding-wrapper">
+      🐹
+      <div v-if="type === MOLE_TYPES.BOMB" class="holding">💣</div>
+      <div class="holding" v-else-if="type === MOLE_TYPES.GRAPE">🍇</div>
+      <div class="holding" v-else-if="type === MOLE_TYPES.BLUEBERRY">🫐</div>
     </div>
   </div>
 </template>
 
 <script>
-import { ITEM_TYPES } from '@/constants/constants';
+import { MOLE_TYPES } from '@/constants/constants';
 
 export default {
   name: 'Item',
@@ -30,21 +23,21 @@ export default {
   },
   data() {
     return {
-      ITEM_TYPES, // for template access
+      MOLE_TYPES, // for template access
     };
   },
 };
 </script>
 
 <style scoped lang="scss">
-.item {
+.mole {
   font-size: 3.5rem;
 
   @media (max-width: 600px) {
     font-size: 2rem;
   }
 
-  .mole {
+  .holding-wrapper {
     position: relative;
 
     .holding {

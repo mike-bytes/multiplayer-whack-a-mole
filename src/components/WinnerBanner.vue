@@ -2,7 +2,7 @@
   <div class="winner-banner">
     <div class="banner-content">
       <h1>🎉 {{ store.winner.name }} Wins! 🎉</h1>
-      <p>Final Scores: <ScoreBoard /></p>
+      <p>Final Scoring: <ScoreBoard /></p>
       <div v-if="store.countdown > 0">{{ store.countdown }}</div>
       <!-- <button @click="playAgain" class="btn-play-again">Play Again</button> -->
     </div>

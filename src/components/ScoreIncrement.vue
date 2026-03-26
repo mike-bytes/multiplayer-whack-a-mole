@@ -31,7 +31,7 @@ export default {
   color: gold;
   font-weight: bold;
   font-size: 60px;
-  animation: floatUp 1s ease forwards;
+  animation: floatUp 2s ease forwards;
 
   &.is-negative-points {
     color: red;

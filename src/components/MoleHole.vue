@@ -58,7 +58,7 @@ export default {
       this.showMallet = true;
       setTimeout(() => {
         this.showMallet = false;
-      }, 350); // match with animation duration
+      }, 200); // match with animation duration
 
       if (!this.item) return;
 
@@ -69,7 +69,7 @@ export default {
       this.showScore = true;
       setTimeout(() => {
         this.showScore = false;
-      }, 300);
+      }, 2000);
     },
   },
 };
@@ -87,6 +87,10 @@ export default {
   cursor: pointer;
   flex: 0 0 calc(25% - 20px);
   background-color: #593b22;
+
+  &:hover {
+    background-color: #a86a38;
+  }
 
   &.hitAnimation {
     animation: moleHoleAnimation 0.3s ease forwards;

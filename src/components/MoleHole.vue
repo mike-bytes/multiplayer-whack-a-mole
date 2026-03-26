@@ -86,8 +86,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
-  border: 1px solid #c79e7c;
+  margin: 2px;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   cursor: pointer;

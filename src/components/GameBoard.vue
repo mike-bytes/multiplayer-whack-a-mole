@@ -13,7 +13,7 @@
 
 <script>
 import MoleHole from '@/components/MoleHole.vue';
-import { NUM_HOLES } from '@/constants/constants';
+import { NUM_HOLES } from '@/shared/constants';
 import { useGameStore } from '@/stores/gameStore';
 
 export default {

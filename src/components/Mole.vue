@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { MOLE_TYPES } from '@/constants/constants';
+import { MOLE_TYPES } from '@/shared/constants';
 
 export default {
   name: 'Mole',

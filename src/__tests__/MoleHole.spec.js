@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
 import MoleHole from '@/components/MoleHole.vue';
-import { MOLE_TYPES } from '@/constants/constants';
+import { MOLE_TYPES } from '@/shared/constants';
 
 // Mock the socket
 vi.mock('@/services/socket', () => {

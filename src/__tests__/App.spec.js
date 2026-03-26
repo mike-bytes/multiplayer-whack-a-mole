@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
 import App from '../App.vue';
-import { MOLE_TYPES } from '@/constants/constants';
+import { MOLE_TYPES } from '@/shared/constants';
 
 describe('App', () => {
   let store;

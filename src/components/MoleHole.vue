@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     item() {
-      return this.store.activeMoles.find((item) => item.index === this.index);
+      return this.store.activeItems.find((item) => item.index === this.index);
     },
   },
   mounted() {

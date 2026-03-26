@@ -3,7 +3,7 @@
     <div class="banner-content">
       <h1>🎉 {{ store.winner.name }} Wins! 🎉</h1>
       <p>Final Scores: <ScoreBoard /></p>
-      <div>{{ store.countdown }}</div>
+      <div v-if="store.countdown > 0">{{ store.countdown }}</div>
       <!-- <button @click="playAgain" class="btn-play-again">Play Again</button> -->
     </div>
   </div>
@@ -40,15 +40,13 @@ export default {
     },
   },
   mounted() {
-    socket.on('startCountdown', (seconds) => {
+    socket.on('startCountdown', (endTime) => {
       if (this.interval) clearInterval(this.interval);
-      this.interval = null;
-
-      console.log('startCountdown', seconds);
-      this.store.countdown = seconds;
       this.interval = setInterval(() => {
-        this.store.countdown--;
-        if (this.store.countdown <= 0) {
+        const remaining = Math.ceil((endTime - Date.now()) / 1000);
+        this.store.countdown = Math.max(remaining, 0);
+
+        if (remaining <= 0) {
           clearInterval(this.interval);
         }
       }, 1000);

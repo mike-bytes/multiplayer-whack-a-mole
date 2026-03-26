@@ -15,7 +15,6 @@ export default {
   },
   computed: {
     isNegativePoints() {
-      console.log('is negative', this.points < 0);
       return this.points < 0;
     },
     formattedPoints() {

@@ -3,4 +3,5 @@ export const ITEM_TYPES = {
   MOLE: 'mole',
   STAR: 'star',
   BOMB: 'bomb',
+  FRUIT: 'fruit',
 };

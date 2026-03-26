@@ -5,10 +5,15 @@
     <div v-else-if="type === ITEM_TYPES.BOMB">
       <div class="mole">
         🐹
-        <div class="bomb" />
+        <div class="holding">💣</div>
       </div>
     </div>
-    <div v-else></div>
+    <div v-else-if="type === ITEM_TYPES.FRUIT">
+      <div class="mole">
+        🐹
+        <div class="holding">🍇</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,17 +46,16 @@ export default {
 
   .mole {
     position: relative;
-  }
 
-  .bomb::after {
-    content: '💣';
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    font-size: 2rem;
-
-    @media (max-width: 600px) {
+    .holding {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
       font-size: 1.5rem;
+
+      @media (max-width: 600px) {
+        font-size: 1rem;
+      }
     }
   }
 }

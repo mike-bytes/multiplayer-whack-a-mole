@@ -1,5 +1,5 @@
 <template>
-  <div :class="['mole-hole', { hitAnimation }]" @click="whack">
+  <div :class="['mole-hole', { hitAnimation }]" @mousedown="whack">
     <Item v-if="item" :type="item.type" />
     <Mallet :swing="showMallet" />
     <ScoreIncrement v-show="showScore" :points="points" />

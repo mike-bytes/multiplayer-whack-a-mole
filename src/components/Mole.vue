@@ -1,5 +1,5 @@
 <template>
-  <div class="mole">
+  <div class='mole'">
     <div v-if="type === MOLE_TYPES.STAR">⭐</div>
     <div v-else class="holding-wrapper">
       🐹
@@ -42,9 +42,8 @@ export default {
         case MOLE_TYPES.BANANA:
           return '🍌';
         default:
-          break;
+          return null;
       }
-      return null;
     },
   },
 };

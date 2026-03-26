@@ -1,6 +1,7 @@
 <template>
   <div :class="['mole-hole', { hitAnimation }]" @mousedown="whack">
     <Mole v-if="mole" :type="mole.type" />
+    <div v-if="explosionAnimation" class="explosion">💥</div>
     <Mallet :swing="showMallet" />
     <ScoreIncrement v-show="showScore" :points="points" />
   </div>
@@ -33,6 +34,7 @@ export default {
       showScore: false,
       showMallet: false,
       hitAnimation: false,
+      explosionAnimation: false,
       points: 0,
     };
   },
@@ -52,9 +54,7 @@ export default {
       if (this.gameStore.winner) return;
 
       this.showMallet = true;
-      setTimeout(() => {
-        this.showMallet = false;
-      }, 200); // match with animation duration
+      setTimeout(() => (this.showMallet = false), 200);
 
       if (!this.mole) return;
 
@@ -63,18 +63,18 @@ export default {
     showScoreIncrement(index, points) {
       this.points = points;
       this.showScore = true;
-      setTimeout(() => {
-        this.showScore = false;
-      }, 2000);
+      setTimeout(() => (this.showScore = false), 2000);
     },
-    hitHandler({ index, points }) {
+    hitHandler({ index, points, isExplosion }) {
       if (index !== this.index) return;
 
       this.hitAnimation = true;
-      setTimeout(() => {
-        this.hitAnimation = false;
-      }, 300); // match animation duration
+      setTimeout(() => (this.hitAnimation = false), 300);
 
+      if (isExplosion) {
+        this.explosionAnimation = true;
+        setTimeout(() => (this.explosionAnimation = false), 300);
+      }
       this.showScoreIncrement(index, points);
     },
   },
@@ -117,6 +117,31 @@ export default {
   &.gameOver {
     cursor: default;
     opacity: 0.6;
+  }
+
+  .explosion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* center exactly */
+    font-size: 9rem;
+    pointer-events: none;
+    animation: explodeAnim 0.5s ease forwards;
+  }
+
+  @keyframes explodeAnim {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.3);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0;
+    }
   }
 }
 </style>

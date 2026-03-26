@@ -29,10 +29,12 @@ export default {
   computed: {
     holdingItem() {
       switch (this.type) {
-        case MOLE_TYPES.GRAPE:
+        case MOLE_TYPES.BOMB:
           return '💣';
-        case MOLE_TYPES.BLUEBERRY:
+        case MOLE_TYPES.GRAPE:
           return '🍇';
+        case MOLE_TYPES.BLUEBERRY:
+          return '🫐';
         case MOLE_TYPES.LEMON:
           return '🍋';
         case MOLE_TYPES.THUMBS_DOWN:

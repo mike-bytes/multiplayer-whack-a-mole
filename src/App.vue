@@ -1,31 +1,21 @@
 <script>
 import Game from '@/components/Game.vue';
 import WaitScreen from '@/components/WaitScreen.vue';
-import { useSocketStore } from '@/stores/socketStore';
 
 export default {
   name: 'App',
   components: { Game, WaitScreen },
-  watch: {
-    'socketStore.connected'(newValue) {
-      this.isReady = newValue;
-    },
-  },
   data() {
     return {
       isReady: false,
-      socketStore: useSocketStore(),
     };
-  },
-  mounted() {
-    this.socketStore.connectToServer();
   },
 };
 </script>
 
 <template>
   <div class="app">
-    <WaitScreen v-if="!isReady" />
+    <WaitScreen v-if="!isReady" @done="isReady = true" />
     <Game v-else />
   </div>
 </template>

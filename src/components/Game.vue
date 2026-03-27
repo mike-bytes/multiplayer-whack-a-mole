@@ -2,7 +2,6 @@
   <div class="game" v-if="socketStore.connected">
     <div class="top">
       <div class="title">Multiplayer Whack-a-Mole</div>
-      <NameInput v-model="userName" />
       <ScoreBoard />
     </div>
     <WinnerBanner v-if="!!gameStore.winner" />
@@ -25,13 +24,7 @@ export default {
     return {
       gameStore: useGameStore(),
       socketStore: useSocketStore(),
-      userName: '',
     };
-  },
-  watch: {
-    userName(newValue) {
-      this.socketStore.socket.emit('setPlayerName', this.userName);
-    },
   },
   mounted() {
     this.socketStore.socket.on('gameState', this.gameStateHandler);

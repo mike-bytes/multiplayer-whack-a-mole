@@ -1,20 +1,24 @@
 <template>
   <div class="name-input">
-    Name:
+    What is your name?
     <input class="field" @input="$emit('update:modelValue', $event.target.value)" />
+    <Button :disabled="!modelValue" @click="$emit('done')">Done</Button>
   </div>
 </template>
 
 <script>
+import Button from '@/components/Button.vue';
+
 export default {
   name: 'NameInput',
+  components: { Button },
   props: {
     modelValue: {
-      type: String,
+      type: [String, null],
       required: true,
     },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'done'],
 };
 </script>
 
@@ -34,6 +38,9 @@ export default {
   input {
     width: 110px;
     height: 50px;
+  }
+  button {
+    font-size: 1.2rem;
   }
 }
 </style>

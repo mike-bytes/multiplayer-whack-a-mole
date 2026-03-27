@@ -34,7 +34,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  user-select: none;
+  touch-action: none;
 
   .holes-wrapper {
     display: flex;

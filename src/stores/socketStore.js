@@ -9,7 +9,8 @@ export const useSocketStore = defineStore('socket', {
   }),
   actions: {
     connectToServer() {
-      if (this.socket) return; // already initialized
+      if (this.initialized) return;
+      if (this.socket) return;
 
       this.socket = io(import.meta.env.VITE_SERVER_URL, {
         autoConnect: false,

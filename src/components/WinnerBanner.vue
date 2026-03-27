@@ -3,8 +3,11 @@
     <div class="banner-content">
       <h1>🎉 {{ gameStore.winner.name }} Wins! 🎉</h1>
       <p>Final Scoring: <ScoreBoard /></p>
-      <div v-if="gameStore.countdown > 0">{{ gameStore.countdown }}</div>
-      <!-- <button @click="playAgain" class="btn-play-again">Play Again</button> -->
+      <Button v-if="showButton" @click="playAgainHandler">Play Again</Button>
+      <span class="waiting" v-else-if="gameStore.countdown === 0">
+        Waiting for opponent<AnimatedDots />
+      </span>
+      <div v-if="gameStore.countdown > 0">Starting in {{ gameStore.countdown }}</div>
     </div>
   </div>
 </template>
@@ -14,10 +17,12 @@ import confetti from 'canvas-confetti';
 import { useGameStore } from '@/stores/gameStore';
 import ScoreBoard from '@/components/ScoreBoard.vue';
 import { useSocketStore } from '@/stores/socketStore';
+import Button from '@/components/Button.vue';
+import AnimatedDots from './AnimatedDots.vue';
 
 export default {
   name: 'WinnerBanner',
-  components: { ScoreBoard },
+  components: { ScoreBoard, Button, AnimatedDots },
   props: {
     isVisible: {
       type: Boolean,
@@ -30,6 +35,7 @@ export default {
       socketStore: useSocketStore(),
       celebrationPlayed: false,
       interval: null,
+      showButton: true,
     };
   },
   watch: {
@@ -41,28 +47,21 @@ export default {
     },
   },
   mounted() {
-    this.socketStore.socket.once('startCountdown', this.startCountdownHandler);
+    // wrap in arrow function so the store action is called with correct context
+    // (e.g. knows what this.countdown refers to)
+    this.socketStore.socket.on('startCountdown', (endTime) =>
+      this.gameStore.startCountdown(endTime),
+    );
   },
   unmounted() {
-    this.socketStore.socket.off('startCountdown', this.startCountdownHandler);
+    this.socketStore.socket.off('startCountdown');
     if (this.interval) clearInterval(this.interval);
+    confetti.reset();
   },
   methods: {
-    playAgain() {
-      confetti.reset();
-      this.$emit('play-again');
-      this.gameStore.winner = null;
-    },
-    startCountdownHandler(endTime) {
-      if (this.interval) clearInterval(this.interval);
-      this.interval = setInterval(() => {
-        const remaining = Math.ceil((endTime - Date.now()) / 1000);
-        this.gameStore.countdown = Math.max(remaining, 0);
-
-        if (remaining <= 0) {
-          clearInterval(this.interval);
-        }
-      }, 1000);
+    playAgainHandler() {
+      this.showButton = false;
+      this.socketStore.socket.emit('playerReady');
     },
   },
 };
@@ -83,10 +82,18 @@ export default {
 
   .banner-content {
     background: white;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .waiting {
+      display: flex;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
   }
 
   h1 {
@@ -95,19 +102,11 @@ export default {
     color: #333;
   }
 
-  .btn-play-again {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-    background: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-  .btn-play-again:hover {
-    background: #45a049;
+  button {
+    background-color: gold;
+    &:hover {
+      background-color: rgb(255, 243, 176);
+    }
   }
 }
 </style>

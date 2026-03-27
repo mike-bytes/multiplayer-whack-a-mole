@@ -10,7 +10,6 @@ export const MOLE_TYPES = {
   BANANA: 'BANANA',
 };
 export const WAITING_MESSAGES = [
-  'Welcome to multiplayer whack-a-mole',
   'One moment as we get things ready',
   'Waking up moles',
   'Collecting fruit',

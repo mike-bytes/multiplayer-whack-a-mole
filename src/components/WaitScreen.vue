@@ -1,15 +1,16 @@
 <template>
   <div class="wait-screen">
+    <div class="title">Welcome to Multiplayer Whack-a-Mole</div>
     <NameInput v-if="showNameInput" v-model="userName" @done="handleUserName" />
     <div>
       <div v-if="showMessages && !isReady" class="message">
-        {{ WAITING_MESSAGES[currentIndex] }}<span class="dots"></span>
+        {{ WAITING_MESSAGES[currentIndex] }}<AnimatedDots />
       </div>
       <div v-if="!showNameInput && isReady">
         <div v-if="gameStore.countdown > 0">Game starts in {{ gameStore.countdown }}</div>
         <Button v-if="!waitingAnotherPlayer" @click="handleReady">Ready to Play</Button>
         <div v-if="waitingAnotherPlayer && gameStore.countdown <= 0">
-          Waiting for another player to join<span class="dots" />
+          Waiting for opponents<AnimatedDots />
         </div>
       </div>
     </div>
@@ -22,10 +23,11 @@ import NameInput from '@/components/NameInput.vue';
 import Button from '@/components/Button.vue';
 import { useGameStore } from '@/stores/gameStore';
 import { useSocketStore } from '@/stores/socketStore';
+import AnimatedDots from '@/components/AnimatedDots.vue';
 
 export default {
   name: 'WaitScreen',
-  components: { NameInput, Button },
+  components: { NameInput, Button, AnimatedDots },
   data() {
     return {
       WAITING_MESSAGES, // for template access
@@ -37,19 +39,20 @@ export default {
       userName: '',
       showNameInput: true,
       showMessages: false,
-      interval: null,
+      doneInterval: null,
       waitingAnotherPlayer: false,
+      isReady: false,
     };
   },
-  computed: {
-    isReady() {
-      const connected = this.socketStore.connected;
-
-      if (connected && this.messageInterval) {
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
+  watch: {
+    'socketStore.connected'(val) {
+      if (val) {
+        if (this.messageInterval) {
+          clearInterval(this.messageInterval);
+          this.messageInterval = null;
+        }
+        this.isReady = true;
       }
-      return connected;
     },
   },
   mounted() {
@@ -59,7 +62,8 @@ export default {
   unmounted() {
     this.socketStore.socket.off('startCountdown', this.startCountdownHandler);
     clearInterval(this.messageInterval);
-    clearInterval(this.interval);
+    clearInterval(this.doneInterval);
+    this.gameStore.stopCountdown();
   },
   methods: {
     handleUserName() {
@@ -72,39 +76,30 @@ export default {
     },
     handleReady() {
       if (!this.userName) return;
+      // do this only after isReady since the server may be spinning up earlier
       this.socketStore.socket.emit('addPlayer', this.userName);
+      this.socketStore.socket.emit('readyPlayer', this.userName);
       this.waitingAnotherPlayer = true;
     },
-    startCountdownHandler(endTime) {
-      console.log('startcountdown');
-      this.showMessages = false;
-      if (this.interval) clearInterval(this.interval);
-      this.interval = setInterval(() => {
-        const remaining = Math.ceil((endTime - Date.now()) / 1000);
-        this.gameStore.countdown = Math.max(remaining, 0);
-
-        if (remaining <= 0) {
-          clearInterval(this.interval);
-          this.$emit('done');
-        }
-      }, 1000);
+    async startCountdownHandler(endTime) {
+      console.log('start coundown wait scren');
+      await this.gameStore.startCountdown(endTime);
+      this.$emit('done');
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/mixins' as *;
+
 .wait-screen {
-  position: fixed;
-  inset: 0;
-  background: #1a1a1a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
+  @include screen-base;
+
+  .title {
+    padding: 20px;
+    font-weight: bold;
+  }
 
   .message {
     animation: fadeIn 0.5s ease;
@@ -119,29 +114,6 @@ export default {
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-
-  .dots::after {
-    content: '';
-    display: inline-block;
-    width: 3ch;
-    text-align: left;
-    animation: dotPulse 2s steps(3, end) infinite;
-  }
-
-  @keyframes dotPulse {
-    0% {
-      content: '';
-    }
-    33% {
-      content: '.';
-    }
-    66% {
-      content: '..';
-    }
-    100% {
-      content: '...';
     }
   }
 }

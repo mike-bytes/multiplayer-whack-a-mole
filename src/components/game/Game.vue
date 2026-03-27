@@ -13,11 +13,11 @@
 <script>
 import NameInput from '@/components/NameInput.vue';
 import ScoreBoard from '@/components/ScoreBoard.vue';
-import GameBoard from '@/components/GameBoard.vue';
-import WinnerBanner from '@/components/WinnerBanner.vue';
+import GameBoard from '@/components/game/GameBoard.vue';
+import WinnerBanner from '@/components/game/WinnerBanner.vue';
 import { useGameStore } from '@/stores/gameStore';
 import { useSocketStore } from '@/stores/socketStore';
-import NewChallengerScreen from '@/components/NewChallengerScreen.vue';
+import NewChallengerScreen from '@/components/screens/NewChallengerScreen.vue';
 
 export default {
   name: 'Game',

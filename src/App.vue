@@ -1,6 +1,6 @@
 <script>
-import Game from '@/components/Game.vue';
-import WaitScreen from '@/components/WaitScreen.vue';
+import Game from '@/components/game/Game.vue';
+import WaitScreen from '@/components/screens/WaitScreen.vue';
 
 export default {
   name: 'App',

@@ -9,8 +9,8 @@
 
 <script>
 import { useGameStore } from '@/stores/gameStore';
-import Mole from '@/components/Mole.vue';
-import Mallet from '@/components/Mallet.vue';
+import Mole from '@/components/game/Mole.vue';
+import Mallet from '@/components/game/Mallet.vue';
 import ScoreIncrement from '@/components/ScoreIncrement.vue';
 import { useSocketStore } from '@/stores/socketStore';
 

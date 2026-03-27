@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MoleHole from '@/components/MoleHole.vue';
+import MoleHole from '@/components/game/MoleHole.vue';
 import { NUM_HOLES } from '@/shared/constants';
 import { useGameStore } from '@/stores/gameStore';
 

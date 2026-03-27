@@ -18,7 +18,7 @@ import { useGameStore } from '@/stores/gameStore';
 import ScoreBoard from '@/components/ScoreBoard.vue';
 import { useSocketStore } from '@/stores/socketStore';
 import Button from '@/components/Button.vue';
-import AnimatedDots from './AnimatedDots.vue';
+import AnimatedDots from '@/components/AnimatedDots.vue';
 
 export default {
   name: 'WinnerBanner',

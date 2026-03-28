@@ -2,6 +2,7 @@
   <div class="wait-screen">
     <div class="title">Welcome to Multiplayer Whack-a-Mole</div>
     <NameInput v-if="showNameInput" v-model="userName" @done="handleUserName" />
+    <Instructions v-else />
     <div>
       <div v-if="showMessages && !isReady" class="message">
         {{ WAITING_MESSAGES[currentIndex] }}<AnimatedDots />
@@ -19,15 +20,16 @@
 
 <script>
 import { WAITING_MESSAGES } from '@/shared/constants';
-import NameInput from '@/components/NameInput.vue';
-import Button from '@/components/Button.vue';
 import { useGameStore } from '@/stores/gameStore';
 import { useSocketStore } from '@/stores/socketStore';
+import NameInput from '@/components/NameInput.vue';
+import Button from '@/components/Button.vue';
 import AnimatedDots from '@/components/AnimatedDots.vue';
+import Instructions from '@/components/game/Instructions.vue';
 
 export default {
   name: 'WaitScreen',
-  components: { NameInput, Button, AnimatedDots },
+  components: { NameInput, Button, AnimatedDots, Instructions },
   data() {
     return {
       WAITING_MESSAGES, // for template access

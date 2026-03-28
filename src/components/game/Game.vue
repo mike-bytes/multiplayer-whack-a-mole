@@ -64,10 +64,6 @@ export default {
       justify-content: center;
       font-weight: bold;
       font-size: 1.5rem;
-
-      @media (max-width: 600px) {
-        display: none;
-      }
     }
   }
 }

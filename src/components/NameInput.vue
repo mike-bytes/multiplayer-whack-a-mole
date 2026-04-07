@@ -1,6 +1,6 @@
 <template>
   <div class="name-input">
-    What is your name?
+    Your name:
     <input class="field" @input="$emit('update:modelValue', $event.target.value)" />
     <Button :disabled="!modelValue" @click="$emit('done')">Done</Button>
   </div>
